@@ -1,13 +1,11 @@
-import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import { withAuth } from "@/context/authContext";
 
-const inter = Inter({ subsets: ["latin"] });
-
-function Home(props) {
+function Dashboard(props) {
   const router = useRouter();
+  const { state } = props.authContext;
   const { isLoggedIn } = props.authContext.state;
 
   useEffect(() => {
@@ -18,7 +16,16 @@ function Home(props) {
     }
   }, []);
 
-  return <main>Loading....</main>;
+  if (!state.isLoggedIn) {
+    router.push("/signin");
+  }
+
+  return (
+    <main>
+      <h1>{state.user.email}</h1>
+      Here goes the Dashboard content
+    </main>
+  );
 }
 
-export default withAuth(Home);
+export default withAuth(Dashboard);
